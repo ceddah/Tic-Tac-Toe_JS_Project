@@ -28,7 +28,7 @@ const gameSettings = (() => {
         }
     }
     resetBoard();
-
+   
     const winningCombination = [
         [0,1,2],
         [0,3,6],
