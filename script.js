@@ -13,18 +13,11 @@ const gameSettings = (() => {
     };
     const Player1 = createPlayer('Player1', 'X', true);
     const Player2 = createPlayer('Player2', 'O', false);
-    
-    let turnsLeft = 9;
-    let winner = undefined;
-    let finalMessage = undefined;
-
-    const endGameEl = document.querySelector('.end-message');
-    const boardElement = document.querySelector('.board');
 
     let board = [];
     //9 Empty Spaces on the board
     const resetBoard = () => {
-        for(let i = 0; i < turnsLeft; i++) {
+        for(let i = 0; i < 9; i++) {
             board[i] = '';
         }
     }
@@ -40,6 +33,45 @@ const gameSettings = (() => {
         [2,5,8],
         [0,4,8]
     ];
+
+    return {board, Player1, Player2, winningCombination, resetBoard}
+})()
+
+const gameController = (() => {
+    let turnsLeft = 9;
+    let winner = undefined;
+    let finalMessage = undefined;
+
+    const endGameEl = document.querySelector('.end-message');
+    const boardElement = document.querySelector('.board');
+    const fields = document.querySelectorAll('.board .field');
+    const turnElement = document.querySelector('.turn');
+
+    fields.forEach(field => field.addEventListener('click', (event) => {
+        markField(event)
+    }));
+
+    const markField = (e) => {
+        const index = e.target.dataset.id;
+        turnsLeft -= 1;
+        e.currentTarget.classList.add('occupied');
+        
+        if(gameSettings.Player1.turn === true && gameSettings.Player2.turn === false) {
+            e.currentTarget.innerHTML = gameSettings.Player1.mark;
+            gameSettings.Player1.changeTurns()
+            gameSettings.Player2.changeTurns();
+            gameSettings.board[index] = gameSettings.Player1.mark;
+            turnElement.innerHTML = "Player 2's turn:"
+        } else {
+            e.currentTarget.innerHTML = gameSettings.Player2.mark;
+            gameSettings.Player1.changeTurns()
+            gameSettings.Player2.changeTurns();
+            gameSettings.board[index] = gameSettings.Player2.mark;
+            turnElement.innerHTML = "Player 1's turn:"
+        }
+        checkForWinner();
+
+    }
 
     const declareWinner = () => {
         endGameEl.querySelector('.victor').innerHTML = finalMessage;
@@ -62,16 +94,16 @@ const gameSettings = (() => {
 
     //Checking if X or O are placed in any of the winning cominations
     const checkForWinner = () => {
-        winningCombination.forEach(combo => {
-            if(board[combo[0]] === Player1.mark && board[combo[1]] === Player1.mark && board[combo[2]] === Player1.mark) {
-                winner = Player1;
+        gameSettings.winningCombination.forEach(combo => {
+            if(gameSettings.board[combo[0]] === gameSettings.Player1.mark && gameSettings.board[combo[1]] === gameSettings.Player1.mark && gameSettings.board[combo[2]] === gameSettings.Player1.mark) {
+                winner = gameSettings.Player1;
                 setFinalMessage(winner.name);
                 declareWinner();
-            } else if(board[combo[0]] === Player2.mark && board[combo[1]] === Player2.mark && board[combo[2]] === Player2.mark) {
-                winner = Player2;
+            } else if(gameSettings.board[combo[0]] === gameSettings.Player2.mark && gameSettings.board[combo[1]] === gameSettings.Player2.mark && gameSettings.board[combo[2]] === gameSettings.Player2.mark) {
+                winner = gameSettings.Player2;
                 setFinalMessage(winner.name);
                 declareWinner();
-            } else if(gameSettings.turnsLeft < 1){
+            } else if(turnsLeft < 1){
                 winner = 'Tied'
                 setFinalMessage(winner);
                 declareWinner();
@@ -83,65 +115,25 @@ const gameSettings = (() => {
     }
 
     const gameRestart = () => {
-        resetBoard();
+        gameSettings.resetBoard();
         turnsLeft = 9;
         winner = undefined;
         finalMessage = undefined;
         boardElement.classList.remove('gameIsOver');
         endGameEl.querySelector('.victor').innerHTML = '';
         endGameEl.classList.add('hidden');
-        Player1.turn = true;
-        Player2.turn = false;
-    }
-
-
-    return {board, Player1, Player2, turnsLeft, checkForWinner, gameRestart}
-})()
-
-const gameController = (() => {
-    const fields = document.querySelectorAll('.board .field');
-    fields.forEach(field => field.addEventListener('click', (event) => {
-        markField(event)
-    }));
-
-
-    const markField = (e) => {
-        const index = e.target.dataset.id;
-        gameSettings.turnsLeft -= 1;
-        e.currentTarget.classList.add('occupied');
-        const turnElement = document.querySelector('.turn');
-        
-        if(gameSettings.Player1.turn === true && gameSettings.Player2.turn === false) {
-            e.currentTarget.innerHTML = gameSettings.Player1.mark;
-            gameSettings.Player1.changeTurns()
-            gameSettings.Player2.changeTurns();
-            gameSettings.board[index] = gameSettings.Player1.mark;
-            turnElement.innerHTML = "Player 2's turn:"
-        } else {
-            e.currentTarget.innerHTML = gameSettings.Player2.mark;
-            gameSettings.Player1.changeTurns()
-            gameSettings.Player2.changeTurns();
-            gameSettings.board[index] = gameSettings.Player2.mark;
-            turnElement.innerHTML = "Player 1's turn:"
-        }
-        gameSettings.checkForWinner();
-
+        gameSettings.Player1.turn = true;
+        gameSettings.Player2.turn = false;
     }
 
     const resetBtn = document.querySelector('.reset');
     resetBtn.addEventListener('click', () => {
-        gameSettings.gameRestart();
+        gameRestart();
         fields.forEach(field => {
             field.innerHTML = '';
             field.classList.remove('occupied');
-            gameSettings.turnsLeft = 9;
+            turnsLeft = 9;
         });
     });
     return {fields}
 })()
-
-
-function Testing(blabla) {
-    console.log('blabla')
-}
-Testing();
