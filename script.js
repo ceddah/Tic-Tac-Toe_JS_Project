@@ -1,6 +1,7 @@
 //Highlight Winning Combo when game is over
 //Add option to change Names for P1 and P2 but let P1 and P2 be default if they are not changed.
 //Make animation for when we click on a board, animate mark.
+//Remove who's turn it is after switching code
 const gameSettings = (() => {
     const createPlayer = (name, mark, turn) => {
         return {name,
@@ -108,17 +109,20 @@ const gameController = (() => {
         const index = e.target.dataset.id;
         gameSettings.turnsLeft -= 1;
         e.currentTarget.classList.add('occupied');
-
+        const turnElement = document.querySelector('.turn');
+        
         if(gameSettings.Player1.turn === true && gameSettings.Player2.turn === false) {
             e.currentTarget.innerHTML = gameSettings.Player1.mark;
             gameSettings.Player1.changeTurns()
             gameSettings.Player2.changeTurns();
             gameSettings.board[index] = gameSettings.Player1.mark;
+            turnElement.innerHTML = "Player 2's turn:"
         } else {
             e.currentTarget.innerHTML = gameSettings.Player2.mark;
             gameSettings.Player1.changeTurns()
             gameSettings.Player2.changeTurns();
             gameSettings.board[index] = gameSettings.Player2.mark;
+            turnElement.innerHTML = "Player 1's turn:"
         }
         gameSettings.checkForWinner();
 
@@ -135,3 +139,9 @@ const gameController = (() => {
     });
     return {fields}
 })()
+
+
+function Testing(blabla) {
+    console.log('blabla')
+}
+Testing();
