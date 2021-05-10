@@ -132,7 +132,6 @@ body.active .titles {
 }
 
 #game-screen .end-message.hidden {
-    opacity: 0;
     visibility: hidden;
 }
 
@@ -163,6 +162,10 @@ body.active .titles {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     margin: 1.5rem 0 0rem;
+}
+
+#game-screen .board.gameIsOver {
+    pointer-events: none;
 }
 
 #game-screen .board .field {

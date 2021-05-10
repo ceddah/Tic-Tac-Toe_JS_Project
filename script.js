@@ -16,7 +16,9 @@ const gameSettings = (() => {
     let turnsLeft = 9;
     let winner = undefined;
     let finalMessage = undefined;
-    let gameOver = false;
+
+    const endGameEl = document.querySelector('.end-message');
+    const boardElement = document.querySelector('.board');
 
     let board = [];
     //9 Empty Spaces on the board
@@ -39,7 +41,6 @@ const gameSettings = (() => {
     ];
 
     const declareWinner = () => {
-        const endGameEl = document.querySelector('.end-message');
         endGameEl.querySelector('.victor').innerHTML = finalMessage;
         endGameEl.classList.remove('hidden');
     }
@@ -75,9 +76,25 @@ const gameSettings = (() => {
                 declareWinner();
             }
         })
+        if(winner !== undefined) {
+            boardElement.classList.add('gameIsOver');
+        }
     }
 
-    return {board, Player1, Player2, turnsLeft, checkForWinner, winner}
+    const gameRestart = () => {
+        resetBoard();
+        turnsLeft = 9;
+        winner = undefined;
+        finalMessage = undefined;
+        boardElement.classList.remove('gameIsOver');
+        endGameEl.querySelector('.victor').innerHTML = '';
+        endGameEl.classList.add('hidden');
+        Player1.turn = true;
+        Player2.turn = false;
+    }
+
+
+    return {board, Player1, Player2, turnsLeft, checkForWinner, gameRestart}
 })()
 
 const gameController = (() => {
@@ -91,21 +108,30 @@ const gameController = (() => {
         const index = e.target.dataset.id;
         gameSettings.turnsLeft -= 1;
         e.currentTarget.classList.add('occupied');
-        console.log(gameSettings.winner)
-        if(gameSettings.winner === undefined) {
-            if(gameSettings.Player1.turn === true && gameSettings.Player2.turn === false) {
-                e.currentTarget.innerHTML = gameSettings.Player1.mark;
-                gameSettings.Player1.changeTurns()
-                gameSettings.Player2.changeTurns();
-                gameSettings.board[index] = gameSettings.Player1.mark;
-            } else {
-                e.currentTarget.innerHTML = gameSettings.Player2.mark;
-                gameSettings.Player1.changeTurns()
-                gameSettings.Player2.changeTurns();
-                gameSettings.board[index] = gameSettings.Player2.mark;
-            }
-            gameSettings.checkForWinner();
+
+        if(gameSettings.Player1.turn === true && gameSettings.Player2.turn === false) {
+            e.currentTarget.innerHTML = gameSettings.Player1.mark;
+            gameSettings.Player1.changeTurns()
+            gameSettings.Player2.changeTurns();
+            gameSettings.board[index] = gameSettings.Player1.mark;
+        } else {
+            e.currentTarget.innerHTML = gameSettings.Player2.mark;
+            gameSettings.Player1.changeTurns()
+            gameSettings.Player2.changeTurns();
+            gameSettings.board[index] = gameSettings.Player2.mark;
         }
-    } 
+        gameSettings.checkForWinner();
+
+    }
+
+    const resetBtn = document.querySelector('.reset');
+    resetBtn.addEventListener('click', () => {
+        gameSettings.gameRestart();
+        fields.forEach(field => {
+            field.innerHTML = '';
+            field.classList.remove('occupied');
+            gameSettings.turnsLeft = 9;
+        });
+    });
     return {fields}
 })()
