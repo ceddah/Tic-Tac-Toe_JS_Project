@@ -1,27 +1,25 @@
-//Highlight Winning Combo when game is over
 //Add option to change Names for P1 and P2 but let P1 and P2 be default if they are not changed.
-//Make animation for when we click on a board, animate mark.
-//Remove who's turn it is after switching code
+//Link first and section page with click event
 const gameSettings = (() => {
     const createPlayer = (name, mark, turn) => {
         return {name,
-            mark,
-            turn,
-            changeTurns() {
-                this.turn = !this.turn
-            }}
+                mark,
+                turn,
+                changeTurns() {
+                    this.turn = !this.turn
+        }}
     };
     const Player1 = createPlayer('Player1', 'X', true);
     const Player2 = createPlayer('Player2', 'O', false);
 
     let board = [];
     //9 Empty Spaces on the board
-    const resetBoard = () => {
+    const newBoard = () => {
         for(let i = 0; i < 9; i++) {
             board[i] = '';
         }
     }
-    resetBoard();
+    newBoard();
    
     const winningCombination = [
         [0,1,2],
@@ -34,7 +32,24 @@ const gameSettings = (() => {
         [0,4,8]
     ];
 
-    return {board, Player1, Player2, winningCombination, resetBoard}
+    const gameStart = () => {
+        selections.forEach(button => {
+            if(button.classList.contains('selected')) {
+                document.body.classList.add('active');
+            }
+        })
+    }
+
+    const selections = document.querySelectorAll('.options button');
+        selections.forEach(button => button.addEventListener('click', (e) => {
+            selections.forEach(button => button.classList.remove('selected'));
+            e.target.classList.add('selected');
+        }))
+
+    const startButton = document.querySelector('.game-start');
+    startButton.addEventListener('click', gameStart);
+
+    return {board, Player1, Player2, winningCombination, newBoard}
 })()
 
 const gameController = (() => {
@@ -57,13 +72,15 @@ const gameController = (() => {
         e.currentTarget.classList.add('occupied');
         
         if(gameSettings.Player1.turn === true && gameSettings.Player2.turn === false) {
-            e.currentTarget.innerHTML = gameSettings.Player1.mark;
+            // e.currentTarget.innerHTML = gameSettings.Player1.mark;
+            e.currentTarget.innerHTML = `<span>${gameSettings.Player1.mark}</span>`;
             gameSettings.Player1.changeTurns()
             gameSettings.Player2.changeTurns();
             gameSettings.board[index] = gameSettings.Player1.mark;
             turnElement.innerHTML = "Player 2's turn:"
         } else {
-            e.currentTarget.innerHTML = gameSettings.Player2.mark;
+            // e.currentTarget.innerHTML = gameSettings.Player2.mark;
+            e.currentTarget.innerHTML = `<span>${gameSettings.Player2.mark}</span>`;
             gameSettings.Player1.changeTurns()
             gameSettings.Player2.changeTurns();
             gameSettings.board[index] = gameSettings.Player2.mark;
@@ -76,6 +93,7 @@ const gameController = (() => {
     const declareWinner = () => {
         endGameEl.querySelector('.victor').innerHTML = finalMessage;
         endGameEl.classList.remove('hidden');
+        turnElement.classList.add('hidden');
     }
 
     const setFinalMessage = (winner) => {
@@ -92,6 +110,16 @@ const gameController = (() => {
         }
     }
 
+    const highLightCombo = (combination, fields, winner) => {
+        if(winner === 'Player1') {
+            combination.forEach(combo => fields[combo].classList.add('player1Won'));
+        } else if (winner === 'Player2'){
+            combination.forEach(combo => fields[combo].classList.add('player2Won'));
+        } else { 
+            return 
+        }
+    }
+
     //Checking if X or O are placed in any of the winning cominations
     const checkForWinner = () => {
         gameSettings.winningCombination.forEach(combo => {
@@ -99,10 +127,12 @@ const gameController = (() => {
                 winner = gameSettings.Player1;
                 setFinalMessage(winner.name);
                 declareWinner();
+                highLightCombo(combo, fields, winner.name);
             } else if(gameSettings.board[combo[0]] === gameSettings.Player2.mark && gameSettings.board[combo[1]] === gameSettings.Player2.mark && gameSettings.board[combo[2]] === gameSettings.Player2.mark) {
                 winner = gameSettings.Player2;
                 setFinalMessage(winner.name);
                 declareWinner();
+                highLightCombo(combo, fields, winner.name);
             } else if(turnsLeft < 1){
                 winner = 'Tied'
                 setFinalMessage(winner);
@@ -114,14 +144,16 @@ const gameController = (() => {
         }
     }
 
+
     const gameRestart = () => {
-        gameSettings.resetBoard();
+        gameSettings.newBoard();
         turnsLeft = 9;
         winner = undefined;
         finalMessage = undefined;
         boardElement.classList.remove('gameIsOver');
-        endGameEl.querySelector('.victor').innerHTML = '';
         endGameEl.classList.add('hidden');
+        turnElement.innerHTML = "Player 1's turn:"
+        turnElement.classList.remove('hidden');
         gameSettings.Player1.turn = true;
         gameSettings.Player2.turn = false;
     }
@@ -132,8 +164,14 @@ const gameController = (() => {
         fields.forEach(field => {
             field.innerHTML = '';
             field.classList.remove('occupied');
+            field.classList.add('anim');
+            field.classList.remove('player1Won');
+            field.classList.remove('player2Won');
             turnsLeft = 9;
+            setTimeout(() => {
+                field.classList.remove('anim');
+            }, 1000)
         });
     });
-    return {fields}
+
 })()
