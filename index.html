@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Odin Project Curriculum">
+    <meta name="keywords" content="HTML,CSS,JavaScript">
+    <meta name="author" content="Ceda Nikolic">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <title>Tic-Tac-Toe Project</title>
+</head>
+<body class="active">
+    <div class="titles">
+        <h4>Play</h4>
+        <h1 class="title">Tic-Tac-Toe</h1>
+    </div>
+    <section id="starting-screen">
+        <main class="options">
+            <button type="button">X</button>
+            <button type="button">O</button>
+        </main>
+        <button type="button" class="game-start">Start</button>
+    </section>
+
+    <section id="game-screen">
+        <p class="turn">Player 1's turn:</p>
+        <div class="board">
+            <div class="field" data-id="0"></div>
+            <div class="field" data-id="1"></div>
+            <div class="field" data-id="2"></div>
+            <div class="field" data-id="3"></div>
+            <div class="field" data-id="4"></div>
+            <div class="field" data-id="5"></div>
+            <div class="field" data-id="6"></div>
+            <div class="field" data-id="7"></div>
+            <div class="field" data-id="8"></div>
+        </div>
+        <div class="end-message hidden">
+            <span class="victor">Player 2 has won!</span>
+            <button class="reset">Play Again</button>
+        </div>
+    </section>
+
+    <script src="./script.js"></script>
+</body>
+</html>
