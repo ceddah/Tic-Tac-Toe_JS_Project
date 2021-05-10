@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    height: 100vh;
+    height: 200vh;
     background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1% );
 }
 
@@ -55,7 +55,7 @@ body.active .titles {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    transition: margin 0.7s ease-in-out;
+    transition: margin 0.7s ease-in-out; 
 }
 
 #starting-screen .options {
@@ -123,11 +123,15 @@ body.active .titles {
     font-size: 25px;
 }
 
+#game-screen .turn.hidden {
+    visibility: hidden;
+}
+
 #game-screen .end-message {
     width: 400px;
-    display: flex;
+    display: flex; 
     align-items: center;
-    /* justify-content: space-around;  */
+    justify-content: space-around;
     flex-direction: column;
 }
 
@@ -140,6 +144,7 @@ body.active .titles {
     font-style: italic;
     text-decoration: underline;
     line-height: 85px;
+    display: block;
 }
 
 
@@ -181,12 +186,29 @@ body.active .titles {
 }
 
 #game-screen .board .field:hover {
-    background-color: #FCF5E5;
+    background-color: rgba(234, 238, 238, 0.67);
 }
 
 #game-screen .board .field.occupied {
     pointer-events: none;
     user-select: none;
+}
+
+#game-screen .board .field.player1Won {
+    background-color: #EC5800
+}
+
+#game-screen .board .field.player2Won {
+    background-color: #1F51FF;
+}
+
+/* Animation */
+#game-screen .board .field.anim {
+    animation: animateBoard 0.5s ease;
+}
+
+#game-screen .board .field span {
+    animation: animateMark 0.5s ease forwards;
 }
 
 #game-screen .board .field:nth-child(1),
@@ -211,4 +233,20 @@ body.active .titles {
 #game-screen .board .field:nth-child(6),
 #game-screen .board .field:nth-child(9) {
     border-right: none;
+}
+
+@keyframes animateBoard {
+    from {
+        transform: scale(1.3);
+    } to {
+        transform: scale(1);
+    }
+}
+
+@keyframes animateMark {
+    from {
+        transform: scale(1.5);
+    } to {
+        transform: scale(1);
+    }
 }
