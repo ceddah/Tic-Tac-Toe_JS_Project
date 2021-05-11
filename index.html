@@ -20,8 +20,11 @@
         <main class="options">
             <button type="button">X</button>
             <button type="button">O</button>
+            <input type="text" name="player1Name" id="player1Name" value="Player 1">
+            <input type="text" name="player1Name" id="player2Name" value="Player 2">
         </main>
         <button type="button" class="game-start">Start</button>
+        <aside class="notification">Rules: <br> 1. Select which player has the first move.<br>2. Player names cannot be blank.<br>3. Loser plays first in the second round.</aside>
     </section>
 
     <section id="game-screen">
@@ -39,7 +42,8 @@
         </div>
         <div class="end-message hidden">
             <span class="victor">Player 2 has won!</span>
-            <button class="reset">Play Again</button>
+            <button class="play-again-btn">Play Again</button>
+            <!-- button -->
         </div>
     </section>
 
