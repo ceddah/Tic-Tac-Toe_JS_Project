@@ -14,8 +14,8 @@ html {
 }
 
 body {
-    height: 200vh;
-    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1% );
+    height: 100vh;
+    overflow: hidden;
 }
 
 .titles {
@@ -25,6 +25,7 @@ body {
     transform: translateX(-50%);
     text-align: center;
     transition: 0.7s ease-in-out;
+    z-index: 10;
 }
 
 .titles  h4 {
@@ -51,6 +52,8 @@ body.active .titles {
 
 #starting-screen {
     height: 100vh;
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1% );
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -59,9 +62,20 @@ body.active .titles {
 }
 
 #starting-screen .options {
-    margin-top: 5rem;
+    margin-top: 7rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
 }
 
+#starting-screen .options input {
+    width: 170px;
+    margin: 16px 30px;
+    outline: none;
+    height: 24px;
+    background: #ededed;
+    border: 1px solid #ccc;
+    padding: 4px;
+}
 
 #starting-screen .options button {
     margin: 0 30px;
@@ -109,6 +123,20 @@ body.active .titles {
     outline: none;
 }
 
+#starting-screen .notification {
+    position: absolute;
+    top: 1%;
+    right: 0.6%;
+    width: 340px;
+    height: 150px;
+    background: #ededed;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    color: #555;
+    line-height: 30px;
+    padding: 1rem;
+    border-radius: 5px;
+}
 
 #game-screen {
     height: 100vh;
@@ -116,6 +144,7 @@ body.active .titles {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(234,249,249,0.67) 0.1%, rgba(239,249,251,0.63) 90.1% );
 }
 
 #game-screen .turn {
@@ -194,11 +223,11 @@ body.active .titles {
     user-select: none;
 }
 
-#game-screen .board .field.player1Won {
+#game-screen .board .field.redSideWins {
     background-color: #EC5800
 }
 
-#game-screen .board .field.player2Won {
+#game-screen .board .field.blueSideWins {
     background-color: #1F51FF;
 }
 
