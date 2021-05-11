@@ -1,4 +1,3 @@
-//Add return/choose mark again button in second screen that returns to first screen
 const gameSettings = (() => {
     const createPlayer = (name, mark, turn) => {
         return {name,
